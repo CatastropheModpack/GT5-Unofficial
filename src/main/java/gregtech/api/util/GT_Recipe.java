@@ -1,8 +1,23 @@
 package gregtech.api.util;
 
+import static gregtech.api.enums.GT_Values.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
 import codechicken.nei.PositionedStack;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IHasWorldObjectAndCoords;
 import gregtech.api.objects.GT_FluidStack;
@@ -19,11 +34,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.*;
-
-import static gregtech.api.enums.GT_Values.*;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -77,7 +87,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
      * Used for describing recipes that do not fit the default recipe pattern (for example Large Boiler Fuels)
      */
     private String[] neiDesc = null;
-    
+
     private GT_Recipe(GT_Recipe aRecipe) {
         mInputs = GT_Utility.copyStackArray((Object[]) aRecipe.mInputs);
         mOutputs = GT_Utility.copyStackArray((Object[]) aRecipe.mOutputs);
@@ -479,7 +489,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
 	public static class GT_Recipe_AssemblyLine{
         public static final ArrayList<GT_Recipe_AssemblyLine> sAssemblylineRecipes = new ArrayList<GT_Recipe_AssemblyLine>();
-        
+
         public ItemStack mResearchItem;
         public int mResearchTime;
         public ItemStack[] mInputs;
@@ -492,7 +502,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public GT_Recipe_AssemblyLine(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt) {
         	this(aResearchItem, aResearchTime, aInputs, aFluidInputs, aOutput, aDuration, aEUt, new ItemStack[aInputs.length][]);
         }
-        
+
         public GT_Recipe_AssemblyLine(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt, ItemStack[][] aAlt) {
         	mResearchItem = aResearchItem;
         	mResearchTime = aResearchTime;
@@ -503,7 +513,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         	mEUt = aEUt;
         	mOreDictAlt = aAlt;
         }
-        
+
     }
 
     public static class GT_Recipe_Map {
@@ -586,7 +596,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map_Fuel sUltraHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.extrahugenaquadahreactor", "Naquadah Reactor MkV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.fluidnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_LargeBoilerFakeFuels sLargeBoilerFakeFuels = new GT_Recipe_Map_LargeBoilerFakeFuels();
-        
+
         /**
          * HashMap of Recipes based on their Items
          */
@@ -769,7 +779,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_Recipe aRecipe, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
         	return findRecipe(aTileEntity, aRecipe, aNotUnificated, true, aVoltage, aFluids, aSpecialSlot, aInputs);
-        }	
+        }
         /**
          * finds a Recipe matching the aFluid and ItemStack Inputs.
          *
@@ -1509,14 +1519,14 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     }
 
     public static class GT_Recipe_Map_LargeBoilerFakeFuels extends GT_Recipe_Map {
-    	
+
         public GT_Recipe_Map_LargeBoilerFakeFuels() {
             super(new HashSet<GT_Recipe>(30), "gt.recipe.largeboilerfakefuels", "Large Boiler", null, RES_PATH_GUI + "basicmachines/Default", 1, 0, 1, 0, 1, E, 1, E, true, true);
             GT_Recipe explanatoryRecipe = new GT_Recipe(true, new ItemStack[]{}, new ItemStack[]{}, null, null, null, null, 1, 1, 1);
             explanatoryRecipe.setNeiDesc("Not all solid fuels are listed.", "Any item that burns in a", "vanilla furnace will burn in", "a Large Boiler.");
             addRecipe(explanatoryRecipe);
         }
-    	
+
     	public GT_Recipe addDenseLiquidRecipe(GT_Recipe recipe) {
     		return addRecipe(recipe, ((double)recipe.mSpecialValue) / 10);
     	}
@@ -1530,16 +1540,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     			addSolidRecipe(itemStack);
     		}
     	}
-    	    	
+
     	public GT_Recipe addSolidRecipe(ItemStack fuelItemStack){
     		return addRecipe(new GT_Recipe(true, new ItemStack[]{fuelItemStack}, new ItemStack[]{}, null, null, null, null, 1, 0, GT_ModHandler.getFuelValue(fuelItemStack) / 1600), ((double)GT_ModHandler.getFuelValue(fuelItemStack)) / 1600);
     	}
-    	
+
     	private GT_Recipe addRecipe(GT_Recipe recipe, double baseBurnTime){
 			recipe = new GT_Recipe(recipe);
 			//Some recipes will have a burn time like 15.9999999 and % always rounds down
 			double floatErrorCorrection = 0.0001;
-			
+
     		double bronzeBurnTime = baseBurnTime * 2 + floatErrorCorrection;
     		bronzeBurnTime -= bronzeBurnTime % 0.05;
     		double steelBurnTime = baseBurnTime * 1.5 + floatErrorCorrection;
@@ -1548,22 +1558,22 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     		titaniumBurnTime -= titaniumBurnTime % 0.05;
     		double tungstensteelBurnTime = baseBurnTime * 1.2 + floatErrorCorrection;
     		tungstensteelBurnTime -= tungstensteelBurnTime % 0.05;
-    		
-    		recipe.setNeiDesc("Burn time in seconds:", 
-    				String.format("Bronze Boiler: %.4f", bronzeBurnTime), 
-    				String.format("Steel Boiler: %.4f", steelBurnTime), 
-    				String.format("Titanium Boiler: %.4f", titaniumBurnTime), 
+
+    		recipe.setNeiDesc("Burn time in seconds:",
+    				String.format("Bronze Boiler: %.4f", bronzeBurnTime),
+    				String.format("Steel Boiler: %.4f", steelBurnTime),
+    				String.format("Titanium Boiler: %.4f", titaniumBurnTime),
     				String.format("Tungstensteel Boiler: %.4f", tungstensteelBurnTime));
     		return super.addRecipe(recipe);
     	}
-    	
+
     }
-    
+
     public static class GT_Recipe_Map_LargeChemicalReactor extends GT_Recipe_Map{
         private static int TOTAL_INPUT_COUNT = 6;
     	private static int OUTPUT_COUNT = 2;
     	private static int FLUID_OUTPUT_COUNT = 4;
-    	
+
         public GT_Recipe_Map_LargeChemicalReactor() {
             super(new HashSet<GT_Recipe>(200), "gt.recipe.largechemicalreactor", "Large Chemical Reactor", null, RES_PATH_GUI + "basicmachines/Default", 2, OUTPUT_COUNT, 0, 0, 1, E, 1, E, true, true);
         }
@@ -1617,7 +1627,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             if (aOutputs == null) {
                 aOutputs = new ItemStack[0];
             }
-        	
+
         	for (ItemStack output : aOutputs) {
         		FluidStack outputFluidContent = FluidContainerRegistry.getFluidForFilledItem(output);
         		if (outputFluidContent != null) {
@@ -1643,7 +1653,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         	}
         	aOutputs = adjustedOutputs.toArray(new ItemStack[adjustedOutputs.size()]);
         	aFluidOutputs = adjustedFluidOutputs.toArray(new FluidStack[adjustedFluidOutputs.size()]);
-        	
+
             return addRecipe(new GT_Recipe_LargeChemicalReactor(aOptimize, aInputs, aOutputs, aSpecial, aOutputChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue));
         }
 
@@ -1661,7 +1671,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 			    int j = 0;
 
 				ArrayList<PositionedStack> inputStacks = new ArrayList<PositionedStack>(inputlimit);
-				
+
 				for (int i = 0; i < itemLimit; i++, j++) {
                     if (GT_Values.allow_broken_recipemap) {
                         if (this != null && this.mInputs != null && this.mInputs[i] != null)
@@ -1673,10 +1683,15 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                                 GT_Log.out.println("recipe " + this.toString() + " has errored!");
                             inputStacks.add(new FixedPositionedStack(new ItemStack(Items.command_block_minecart), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
                         }
-                    }else
-                        inputStacks.add(new FixedPositionedStack(this.mInputs[i].copy(), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
+                    }else{
+                    	try{
+                    		inputStacks.add(new FixedPositionedStack(this.mInputs[i].copy(), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
+                    	}catch(NullPointerException e){
+                    		//System.out.println(e);
+                    	}
+                    }
 				}
-				
+
 				for (int i = 0; i < fluidLimit; i++, j++) {
                     if (GT_Values.allow_broken_recipemap) {
                         if (this != null && this.mFluidInputs != null && this.mFluidInputs[i] != null)
@@ -1687,10 +1702,15 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                             else
                                 GT_Log.out.println("recipe " + this.toString() + " has errored!");
                         }
-                    }else
-                        inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
+                    }else{
+                    	try{
+                    		inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
+                    	}catch(NullPointerException e){
+                    		//System.out.println(e);
+                    	}
+                    }
                 }
-				
+
 				return inputStacks;
 			}
 
@@ -1699,19 +1719,19 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 				int itemLimit = Math.min(mOutputs.length, OUTPUT_COUNT);
 				int fluidLimit = Math.min(mFluidOutputs.length, FLUID_OUTPUT_COUNT);
 				ArrayList<PositionedStack> outputStacks = new ArrayList<PositionedStack>(itemLimit + fluidLimit);
-				
+
 				for (int i = 0; i < itemLimit; i++) {
                     outputStacks.add(new FixedPositionedStack(this.mOutputs[i].copy(), 102 + i * 18, 5));
 				}
-				
+
 				for (int i = 0; i < fluidLimit; i++) {
 					outputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidOutputs[i], true), 102 + i * 18, 23));
 				}
-				
+
 				return outputStacks;
 			}
 
-            
+
         }
     }
     public static class GT_Recipe_Map_DistillationTower extends GT_Recipe_Map {
@@ -1775,7 +1795,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 			mOreDictAlt = aAlt;
 		}
 
-		
+
 		public Object getAltRepresentativeInput(int aIndex) {
 	        if (aIndex < 0) return null;
 	        if (aIndex < mOreDictAlt.length) {
@@ -1790,6 +1810,6 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 	        if (aIndex >= mInputs.length) return null;
 	        return GT_Utility.copy(mInputs[aIndex]);
 	    }
-    	
+
     }
 }

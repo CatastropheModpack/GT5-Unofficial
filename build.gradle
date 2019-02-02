@@ -70,7 +70,7 @@ repositories {
         name 'DVS1 Maven FS'
         url 'http://dvs1.progwml6.com/files/maven'
     }
-    
+
     maven { // AppleCore
         url "http://www.ryanliptak.com/maven/"
     }
@@ -93,9 +93,6 @@ dependencies {
 	compile "eu.usrv:YAMCore:${config.minecraft.version}-${config.yamcore.version}:deobf"
 	compile "tconstruct:TConstruct:${config.minecraft.version}-${config.tconstruct.version}:deobf"
 	compile "mantle:Mantle:${config.minecraft.version}-${config.mantle.version}:deobf"
-	provided ("appeng:appliedenergistics2:${config.ae2.version}:dev") {
-        exclude module: '*'
-    }
     provided "codechicken:CodeChickenLib:${config.minecraft.version}-${config.codechickenlib.version}:dev"
     provided "codechicken:CodeChickenCore:${config.minecraft.version}-${config.codechickencore.version}:dev"
     provided "codechicken:NotEnoughItems:${config.minecraft.version}-${config.nei.version}:dev"
@@ -111,8 +108,6 @@ dependencies {
     compile files("libs/GalacticraftCore-Dev-${config.gc.version}.jar")
     provided name: "Galacticraft-API", version: config.gc.version, ext: 'jar'
     provided name: "GalacticraftCore-Dev", version: config.gc.version, ext: 'jar'
-    provided name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'
-    provided name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
     provided name: 'Railcraft', version: config.railcraft.version, ext: 'jar'
     provided name: 'IC2NuclearControl', version: config.nc.version, ext: 'jar'
   //provided name: 'ImmersiveEngineering', version: config.immeng.version, ext: 'jar'
@@ -128,11 +123,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'

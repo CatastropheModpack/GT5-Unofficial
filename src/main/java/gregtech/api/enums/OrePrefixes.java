@@ -1,5 +1,17 @@
 package gregtech.api.enums;
 
+import static gregtech.api.enums.GT_Values.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.google.common.base.Objects;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
 import gregtech.api.interfaces.ICondition;
@@ -13,12 +25,6 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.loaders.materialprocessing.ProcessingModSupport;
 import net.minecraft.item.ItemStack;
-
-import java.util.*;
-
-import static gregtech.api.enums.GT_Values.*;
-
-import com.google.common.base.Objects;
 
 public enum OrePrefixes {
     @Deprecated pulp("Pulps", "", "", false, false, false, false, false, false, false, false, false, false, B[0] | B[1] | B[2] | B[3], -1, 64, -1),
@@ -320,7 +326,7 @@ public enum OrePrefixes {
     bar("Bars", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1),
 	toolHeadMallet("Mallet Heads", "", " Mallet Head", true, true, false, false, false, false, true, true, false, false, B[6], M * 6, 16, 127), // Reverse Head consisting out of 6 Ingots.
 	handleMallet("Mallet Handle", "", " Handle", true, true, false, false, false, false, true, true, false, false, B[1] | B[2], M / 2, 64, 126); // Reverse Stick made of half an Ingot. Introduced by Eloraam
-	
+
     public static volatile int VERSION = 509;
 
     static {
@@ -447,7 +453,7 @@ public enum OrePrefixes {
         plateQuadruple.mGeneratedItems.add(Materials.Paper);
         plateQuintuple.mGeneratedItems.add(Materials.Paper);
         ring.mGeneratedItems.add(Materials.Paper);
-        
+
         lens.mGeneratedItems.add(Materials.EnderPearl);
         lens.mGeneratedItems.add(Materials.EnderEye);
 
@@ -706,7 +712,7 @@ public enum OrePrefixes {
                 if (!enableUnusedRings && !(aMaterial == Materials.Titanium || aMaterial == Materials.Chrome || aMaterial == Materials.Iron || aMaterial == Materials.Tin ||
                         aMaterial == Materials.Osmium || aMaterial == Materials.Iridium || aMaterial == Materials.Bronze || aMaterial == Materials.WroughtIron ||
                         aMaterial == Materials.Steel || aMaterial == Materials.StainlessSteel || aMaterial == Materials.PigIron || aMaterial == Materials.TungstenSteel ||
-                        aMaterial == Materials.Rubber || aMaterial == Materials.HSSE || aMaterial == Materials.Neutronium || aMaterial == Materials.HSSG || aMaterial == Materials.Aluminium || 
+                        aMaterial == Materials.Rubber || aMaterial == Materials.HSSE || aMaterial == Materials.Neutronium || aMaterial == Materials.HSSG || aMaterial == Materials.Aluminium ||
                         aMaterial == Materials.Invar || aMaterial == Materials.Brass || aMaterial == Materials.Paper || aMaterial == Materials.Silicone || aMaterial == Materials.StyreneButadieneRubber))
                     ring.mDisabledItems.add(aMaterial);
                 //Foil
@@ -715,8 +721,8 @@ public enum OrePrefixes {
                         aMaterial == Materials.AnnealedCopper || aMaterial == Materials.Steel || aMaterial == Materials.Copper || aMaterial == Materials.YttriumBariumCuprate
                         || aMaterial == Materials.VanadiumGallium || aMaterial == Materials.NiobiumTitanium || aMaterial == Materials.Naquadah || aMaterial == Materials.Manganese ||
                         aMaterial == Materials.Plastic || aMaterial == Materials.Silicone || aMaterial == Materials.PolyvinylChloride || aMaterial == Materials.PolyphenyleneSulfide ||
-                		aMaterial == Materials.Nichrome || aMaterial == Materials.BlackSteel || aMaterial == Materials.Titanium || aMaterial == Materials.TungstenSteel || 
-                		aMaterial == Materials.Tungsten || aMaterial == Materials.HSSG || aMaterial == Materials.NaquadahAlloy || aMaterial == Materials.Duranium || 
+                		aMaterial == Materials.Nichrome || aMaterial == Materials.BlackSteel || aMaterial == Materials.Titanium || aMaterial == Materials.TungstenSteel ||
+                		aMaterial == Materials.Tungsten || aMaterial == Materials.HSSG || aMaterial == Materials.NaquadahAlloy || aMaterial == Materials.Duranium ||
                 		aMaterial == Materials.Europium))
                     foil.mDisabledItems.add(aMaterial);
                 //Fine Wire
@@ -756,7 +762,7 @@ public enum OrePrefixes {
                         aMaterial == Materials.Americium || aMaterial == Materials.Neutronium || aMaterial == Materials.Bronze || aMaterial == Materials.Brass ||
                         aMaterial == Materials.Electrum || aMaterial == Materials.NaquadahEnriched || aMaterial == Materials.CobaltBrass || aMaterial == Materials.IronMagnetic ||
                         aMaterial == Materials.SteelMagnetic || aMaterial == Materials.NeodymiumMagnetic || aMaterial == Materials.Samarium || aMaterial == Materials.SamariumMagnetic || aMaterial == Materials.VanadiumGallium || aMaterial == Materials.Diamond ||
-                        aMaterial == Materials.Wood || aMaterial == Materials.Plastic || aMaterial == Materials.Lead || aMaterial == Materials.SolderingAlloy || aMaterial == Materials.Lapis || 
+                        aMaterial == Materials.Wood || aMaterial == Materials.Plastic || aMaterial == Materials.Lead || aMaterial == Materials.SolderingAlloy || aMaterial == Materials.Lapis ||
                         aMaterial == Materials.Lazurite || aMaterial == Materials.Sodalite|| aMaterial == Materials.PolyvinylChloride))
                     stick.mDisabledItems.add(aMaterial);
                 //Long Rods
@@ -942,7 +948,11 @@ public enum OrePrefixes {
             //if (Materials.mPreventableComponents.contains(this) && !this.mDynamicItems.contains(aMaterial)) return;
             for (IOreRecipeRegistrator tRegistrator : mOreProcessing) {
                 if (D2) GT_Log.ore.println("Processing '" + aOreDictName + "' with the Prefix '" + name() + "' and the Material '" + aMaterial.mName + "' at " + GT_Utility.getClassName(tRegistrator));
-                tRegistrator.registerOre(this, aMaterial, aOreDictName, aModName, GT_Utility.copyAmount(1, aStack));
+                try{
+                	tRegistrator.registerOre(this, aMaterial, aOreDictName, aModName, GT_Utility.copyAmount(1, aStack));
+                }catch(IndexOutOfBoundsException e){
+                	//System.out.println(e);
+                }
             }
         }
     }

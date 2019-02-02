@@ -1,5 +1,14 @@
 package gregtech.nei;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
@@ -27,13 +36,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 public class GT_NEI_DefaultHandler
         extends TemplateRecipeHandler {
@@ -376,16 +378,16 @@ public class GT_NEI_DefaultHandler
         public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
-			
+
             if (aRecipe.getInputPositionedStacks() != null && aRecipe.getOutputPositionedStacks() != null) {
-            	mInputs = aRecipe.getInputPositionedStacks();
-            	mOutputs = aRecipe.getOutputPositionedStacks();
+            		mInputs = aRecipe.getInputPositionedStacks();
+            		mOutputs = aRecipe.getOutputPositionedStacks();
             	return;
             }
 
             mOutputs = new ArrayList<>();
             mInputs = new ArrayList<>();
-            
+
             int tStartIndex = 0;
             switch (GT_NEI_DefaultHandler.this.mRecipeMap.mUsualInputCount) {
                 case 0:
@@ -831,8 +833,8 @@ public class GT_NEI_DefaultHandler
         public List<PositionedStack> getOtherStacks() {
             return this.mOutputs;
         }
-    } 
-    
+    }
+
     public String trans(String aKey, String aEnglish){
     	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
