@@ -1,5 +1,13 @@
 package gregtech.api.util;
 
+import static gregtech.api.enums.GT_Values.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
@@ -12,14 +20,6 @@ import gregtech.api.objects.MaterialStack;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import static gregtech.api.enums.GT_Values.*;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -411,7 +411,11 @@ public class GT_OreDictUnificator {
     public static ArrayList<ItemStack> getOres(Object aOreName) {
         String aName = aOreName == null ? E : aOreName.toString();
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
-        if (GT_Utility.isStringValid(aName)) rList.addAll(OreDictionary.getOres(aName));
-        return rList;
+        try {
+        	if (GT_Utility.isStringValid(aName)) rList.addAll(OreDictionary.getOres(aName));
+        	return rList;
+        }catch(Exception e) {
+        	return rList;
+        }
     }
 }
